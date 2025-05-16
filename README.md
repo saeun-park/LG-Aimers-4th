@@ -51,6 +51,7 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
       - `True`: 영업 전환 성공  
       - `False`: 영업 전환 실패  
 
+---
 
 ## 3. EDA (탐색적 데이터 분석)
 
@@ -61,7 +62,7 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
 
 
 **2. 고객 문의 유형별 전환율 분석**  
-고객의 문의 유형에 따른 전환율을 분석한 결과, `'quotation//purchase'` 카테고리에서 전환율이 특히 높게 나타났다.  
+고객의 문의 유형에 따른 전환율을 분석한 결과, `quotation/purchase` 카테고리에서 전환율이 특히 높게 나타났다.  
 이를 통해 기존 범주형 변수의 각 카테고리별 전환율을 파생변수로 추가하면 예측 모델 성능 향상에 도움이 될 것이라는 인사이트를 얻었다.  
 ![문의 유형별 전환율](images/eda2.png)
 
@@ -78,6 +79,80 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
 
 **4. 파생변수와 타겟 변수 간 상관관계 분석**  
 각 범주형 변수의 카테고리별 전환율을 계산하여 파생변수로 생성한 뒤, 이 변수들과 타겟 변수 `is_converted` 간의 상관관계를 히트맵으로 시각화하였다.  
-
 특히 `customer_idx_converted_rate` 변수가 `is_converted`와 0.97의 매우 강한 양의 상관관계를 보였으며, 이는 고객별 과거 전환률이 현 전환 예측에 매우 중요한 변수임을 시사하였다.
 ![상관관계 히트맵](images/eda4.png)
+
+---
+
+## 4. 데이터 전처리 (Data Preprocessing)
+모델 성능 향상 및 과적합 방지를 위해 아래와 같이 데이터를 전처리하였다.
+
+- 불필요한 컬럼 제거    
+- 결측값 처리  
+- `lead_desc_length` 변수 Box-Cox 변환  
+- **Google Maps API**를 활용한 국가 정보 보완 및 대륙 파생변수 생성  
+  - 일부 국가명이 잘못 입력되어 있거나 누락된 경우를 보완하기 위해 Google Maps API를 활용하여 `customer_country` 정보 정제
+  - 이후 국가 정보를 기반으로 대륙 파생변수를 생성하여 지역적 특성 반영
+  ```python
+  import googlemaps
+  gmaps = googlemaps.Client(key='AIzaSyAVUPrLICIAfdLfYEJDlc84qgzFX8noGWg')
+  
+  # 주요 국가 매칭
+  for country in primary_countries:
+      df.loc[df['customer_country'].str.contains(country, na=False), 'customer_country'] = country
+  
+  # 나머지는 Geocoding API 활용
+  geocode_result = gmaps.geocode(loc)
+  if geocode_result:
+      country_name = geocode_result[0]['address_components'][0]['long_name']
+      df.at[index, 'customer_country'] = country_name
+  
+  # 대륙 파생 변수
+  def get_continent(country):
+      if country in asia_list:
+          return 'Asia'
+      elif country in africa_list:
+          return 'Africa'
+      # ...
+      return 'Others'
+  
+  df['customer_continent'] = df['customer_country'].apply(get_continent)
+  ```
+
+- 정제되지 않은 컬럼들은 **유사한 카테고리끼리 그룹화**하여 범주화 처리 
+
+- `converted_rate` **파생변수 생성**   
+  - 범주형 컬럼에 대해 각 카테고리별 전환율을 계산하여 `~_converted_rate` 변수들을 생성 
+  - 이 변수들은 고객군별 전환 패턴을 반영하므로 모델에 중요한 신호로 작용
+
+
+- **LightGBM 모델**을 활용한 결측값 처리
+  - 대상 컬럼: ‘ver_win_rate_x’, ‘ver_win_ratio_per_bu’ (분류), ‘com_reg_ver_win_rate’ (회귀)
+  - 처리 절차:
+      1. `ver_win_rate_x`의 결측값을 포함한 train 데이터를 이용해 분류 모델 학습 후, 결측값이 있는 데이터를 예측하여 새로운 train 데이터셋 생성
+      2. 위에서 생성한 train 데이터를 사용해 test 데이터의 `ver_win_rate_x` 결측값을 예측하고, 새로운 test 데이터셋 생성
+      3. 동일한 방법으로 ‘ver_win_ratio_per_bu’와 ‘com_reg_ver_win_rate’ 컬럼의 결측값도 채움
+
+
+- **특정 범주 파생변수 생성**
+  - 범주형 컬럼별 카테고리별 전환율 계산
+  - 전환율이 높은 범주에 가중치를 부여하는 파생변수 생성
+  - 최종적으로 84개의 컬럼으로 확장됨
+
+- 라벨인코딩
+  - 데이터셋 내 모든 범주형 변수에 대해 Label Encoding 수행
+  - 테스트 데이터에 train에 없는 새로운 범주가 있을 경우, ‘other’ 범주로 처리하여 **인코딩 안정성 확보**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
