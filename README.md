@@ -1,6 +1,10 @@
 # 🔍 MQL 데이터 기반 B2B 영업기회 창출 예측 모델 개발  
 **LG Aimers 4기 해커톤 프로젝트**
 
+[LG AImers 해커톤 수료증 보기](lg_aimers_certificate.pdf)  
+
+[LG AImers AI 실습 교육 이수증 보기](files/lg_aimers_certificate.pdf)
+
 ## 1. 프로젝트 개요
 
 B2B Marketing은 **기업 고객을 대상으로 영업 기회를 발굴하고 지속적인 매출을 창출하는 것**을 목표로 한다.  
