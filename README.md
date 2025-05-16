@@ -1,7 +1,9 @@
 # 🔍 MQL 데이터 기반 B2B 영업기회 창출 예측 모델 개발  
-**LG Aimers 4기 해커톤 프로젝트**
-- [LG AImers 해커톤 수료증](certificates/lg_aimers_hackathon_certificate.pdf)
-- [LG AImers AI 실습 교육 이수증](certificates/lg_aimers_ai_practice_completion.pdf)
+**LG Aimers 4기 해커톤 프로젝트**  
+
+
+📄 [LG AImers 해커톤 수료증](certificates/lg_aimers_hackathon_certificate.pdf)  
+📄 [LG AImers AI 실습 교육 이수증](certificates/lg_aimers_ai_practice_completion.pdf)
 
 ## 1. 프로젝트 개요
 
@@ -57,19 +59,19 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
 
 ## 3. EDA (탐색적 데이터 분석)
 
-**1. Lead Description 텍스트 길이와 전환율 관계 분석**  
+#### **1. Lead Description 텍스트 길이와 전환율 관계 분석**  
 고객이 작성한 `lead_description` 텍스트의 총 길이를 나타내는 `lead_desc_length` 변수를 생성하였다.  
 `lead_desc_length`가 길수록 영업 전환(`is_converted`) 성공률이 높을 것이라는 가설을 세우고 시각화한 결과, 실제로 전환율이 길이가 긴 리드에서 더 높게 나타나는 경향을 확인하였다.  
 ![lead_desc_length 전환율](images/eda1.png)
 
 
-**2. 고객 문의 유형별 전환율 분석**  
+#### **2. 고객 문의 유형별 전환율 분석**  
 고객의 문의 유형에 따른 전환율을 분석한 결과, `quotation/purchase` 카테고리에서 전환율이 특히 높게 나타났다.  
 이를 통해 기존 범주형 변수의 각 카테고리별 전환율을 파생변수로 추가하면 예측 모델 성능 향상에 도움이 될 것이라는 인사이트를 얻었다.  
 ![문의 유형별 전환율](images/eda2.png)
 
 
-**3. ‘lead_desc_length’ 변수 분포 및 변환**  
+#### **3. ‘lead_desc_length’ 변수 분포 및 변환**  
 `lead_desc_length`의 분포가 오른쪽으로 치우쳐 있는(skewed) 것을 확인하였고, 이를 보정하기 위해 Box-Cox 변환을 수행하였다.  
 변환 후에는 분포가 보다 정규분포에 가까워졌으며, 모델 학습에 더 적합한 형태가 되었다.
 - 변환 전 분포  
@@ -79,7 +81,7 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
   ![Box-Cox 이후](images/eda3-1.png)
 
 
-**4. 파생변수와 타겟 변수 간 상관관계 분석**  
+#### **4. 파생변수와 타겟 변수 간 상관관계 분석**  
 각 범주형 변수의 카테고리별 전환율을 계산하여 파생변수로 생성한 뒤, 이 변수들과 타겟 변수 `is_converted` 간의 상관관계를 히트맵으로 시각화하였다.  
 특히 `customer_idx_converted_rate` 변수가 `is_converted`와 0.97의 매우 강한 양의 상관관계를 보였으며, 이는 고객별 과거 전환률이 현 전환 예측에 매우 중요한 변수임을 시사하였다.
 ![상관관계 히트맵](images/eda4.png)
