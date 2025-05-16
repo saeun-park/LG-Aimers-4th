@@ -184,9 +184,10 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
 
 ## 6. 결과 요약 및 회고
 - **리더보드 성과**
-  - 🏅 **Public LB:** 844명 중 **38등** (**상위 4.5%**)
-  - 🏅 **Private LB:** 844명 중 **56등** (**상위 6.6%**)
-
+  - 🏅 **Public LB:** 844명 중 **38등** (**상위 4.5%**)  
+    <img src="images/public.png" alt="public score" width="300"/>
+  - 🏅 **Private LB:** 844명 중 **56등** (**상위 6.6%**)  
+    <img src="images/private.png" alt="private score" width="300"/>
 - 주요 학습 내용
   - **전처리 함수 모듈화**: Box-Cox 변환, 결측값 처리, 범주화 등의 작업을 각각 함수로 분리하여 모듈화함으로써 재사용성과 유지보수성 향상
   - **의미 있는 파생변수 생성 경험**: `is_converted`와 관련된 범주별 전환율 기반 파생변수를 생성하여 모델 성능 향상 및 도메인 기반 변수 설계 중요성 체감
