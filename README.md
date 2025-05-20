@@ -17,6 +17,10 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
 
 > 🏅 **해커톤 결과**: 844명 중 상위 6.6%의 성과 달성  
 
+
+### 사용 기술 스택
+[![My Skills](https://skillicons.dev/icons?i=py,sklearn,)](https://skillicons.dev)
+
 ---
 
 ## 2. 데이터셋 설명  
