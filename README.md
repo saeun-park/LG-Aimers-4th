@@ -63,7 +63,8 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
 
 #### **1. Lead Description 텍스트 길이와 전환율 관계 분석**  
 고객이 작성한 `lead_description` 텍스트의 총 길이를 나타내는 `lead_desc_length` 변수를 생성하였다.  
-`lead_desc_length`가 길수록 영업 전환(`is_converted`) 성공률이 높을 것이라는 가설을 세우고 시각화한 결과, 실제로 전환율이 길이가 긴 리드에서 더 높게 나타나는 경향을 확인하였다.  
+`lead_desc_length`가 길수록 영업 전환(`is_converted`) 성공률이 높을 것이라는 가설을 세우고 시각화한 결과,  
+실제로 전환율이 길이가 긴 리드에서 더 높게 나타나는 경향을 확인하였다.  
 ![lead_desc_length 전환율](images/eda1.png)
 
 
@@ -85,7 +86,8 @@ MQL(Marketing Qualified Lead) 고객을 기반으로 영업사원을 할당하�
 
 #### **4. 파생변수와 타겟 변수 간 상관관계 분석**  
 각 범주형 변수의 카테고리별 전환율을 계산하여 파생변수로 생성한 뒤, 이 변수들과 타겟 변수 `is_converted` 간의 상관관계를 히트맵으로 시각화하였다.  
-특히 `customer_idx_converted_rate` 변수가 `is_converted`와 0.97의 매우 강한 양의 상관관계를 보였으며, 이는 고객별 과거 전환률이 현 전환 예측에 매우 중요한 변수임을 시사하였다.
+특히 `customer_idx_converted_rate` 변수가 `is_converted`와 0.97의 매우 강한 양의 상관관계를 보였으며,  
+이는 고객별 과거 전환률이 현 전환 예측에 매우 중요한 변수임을 시사하였다.
 ![상관관계 히트맵](images/eda4.png)
 
 ---
